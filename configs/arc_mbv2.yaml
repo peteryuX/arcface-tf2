@@ -1,0 +1,20 @@
+# general
+batch_size: 128
+input_size: 112
+embd_shape: 512
+sub_name: 'arc_mbv2'
+backbone_type: 'MobileNetV2' # 'ResNet50', 'MobileNetV2'
+head_type: ArcHead # 'ArcHead', 'NormHead'
+is_ccrop: False # central-cropping or not
+
+# train
+train_dataset: './data/ms1m_bin.tfrecord'
+binary_img: True
+num_classes: 85742
+num_samples: 5822653
+epochs: 5
+base_lr: 0.01
+w_decay: 0.1
+
+# test
+test_dataset: '/your/path/to/test_dataset'
