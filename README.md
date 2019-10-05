@@ -1,6 +1,10 @@
-# arcface-tf2
+# [arcface-tf2](https://github.com/peteryuX/arcface-tf2)
 
-:fire: [ArcFace](https://arxiv.org/abs/1801.07698) (Additive Angular Margin Loss for Deep Face Recognition) Implemented in Tensorflow 2.0. :fire:
+:fire: ArcFace (Additive Angular Margin Loss for Deep Face Recognition, published in CVPR 2018) implemented in Tensorflow 2.0. This is a unofficial implementation. :fire:
+
+Original Paper (Arxiv): [Link](https://arxiv.org/abs/1801.07698)
+
+Offical Implementation (on MXNet): [Link](http://insightface.ai)
 
 <img src="photo/architecture.JPG">
 
@@ -10,7 +14,7 @@
 :bookmark_tabs:
 
 * [Installation](#Installation)
-* [Data Processing](#Data-Processing)
+* [Data Preparing](#Data-Preparing)
 * [Training and Testing](#Training-and-Testing)
 * [Benchmark and Models](#Benchmark-and-Models)
 * [References](#References)
@@ -39,6 +43,8 @@
 ## Installation
 :pizza:
 
+Create a new python virtual environment by [Anaconda](https://www.anaconda.com/) or just use pip in your python environment as following.
+
 ### Conda
 ```bash
 conda env create -f environment.yml
@@ -56,7 +62,11 @@ pip install -r requirements.txt
 ## Data Preparing
 :beer:
 
-Dowload corresponding data set from [face.evoLVe.PyTorch's Data-Zoo](https://github.com/ZhaoJ9014/face.evoLVe.PyTorch#Data-Zoo). Both training and testing dataset are "Align_112x112" version.
+All dataset used in this repository can be found from [face.evoLVe.PyTorch's Data-Zoo](https://github.com/ZhaoJ9014/face.evoLVe.PyTorch#Data-Zoo).
+
+Note:
+
+- Both training and testing dataset are "Align_112x112" version.
 
 ### Training Dataset
 
@@ -72,7 +82,7 @@ python data/convert_train_tfrecord.py --dataset_path "/path/to/ms1m_align_112/im
 
 ### Testing Dataset
 
-Download [LFW](https://drive.google.com/file/d/1WO5Meh_yAau00Gm2Rz2Pc0SRldLQYigT/view?usp=sharing), [Aged30](https://drive.google.com/file/d/1AoZrZfym5ZhdTyKSxD0qxa7Xrp2Q1ftp/view?usp=sharing), [CFP-FP](https://drive.google.com/file/d/1-sDn79lTegXRNhFuRnIRsgdU88cBfW6V/view?usp=sharing) dataset, then extract them to `/your/path/to/test_dataset`. These testing data are already binary files, so it not necessary to do any preprocessing. The directory structure should be like bellow.
+Download [LFW](https://drive.google.com/file/d/1WO5Meh_yAau00Gm2Rz2Pc0SRldLQYigT/view?usp=sharing), [Aged30](https://drive.google.com/file/d/1AoZrZfym5ZhdTyKSxD0qxa7Xrp2Q1ftp/view?usp=sharing) and [CFP-FP](https://drive.google.com/file/d/1-sDn79lTegXRNhFuRnIRsgdU88cBfW6V/view?usp=sharing) dataset, then extract them to `/your/path/to/test_dataset`. These testing data are already binary files, so it's not necessary to do any preprocessing. The directory structure should be like bellow.
 ```
 /your/path/to/test_dataset/
     -> lfw_align_112/lfw
@@ -90,12 +100,10 @@ Download [LFW](https://drive.google.com/file/d/1WO5Meh_yAau00Gm2Rz2Pc0SRldLQYigT
 ## Training and Testing
 :lollipop:
 
-You can modify your dataset path or other settings in `./configs/arc_res50.yaml`, which like below.
-
-Note: The `binary_img` should be according to your training data type.
+You can modify your own dataset path or other settings in [./configs/*.yaml](https://github.com/peteryuX/arcface-tf2/tree/master/configs) for training and testing, which like below.
 
 ```python
-# general
+# general (shared both in training and testing)
 batch_size: 128
 input_size: 112
 embd_shape: 512
@@ -117,8 +125,16 @@ w_decay: 0.1
 test_dataset: '/your/path/to/test_dataset'
 ```
 
+Note:
+- The `sub_name` is the name of outputs directory used in checkpoints and logs folder. (make sure of setting it unique to other models)
+- The `head_type` used to choose [ArcFace](https://arxiv.org/abs/1801.07698) head or normal fully connected layer head for classification in training. (see more detail in [./modules/models.py](https://github.com/peteryuX/arcface-tf2/blob/master/modules/models.py#L90-L94))
+- The `is_ccrop` means doing central-cropping on both trainging and testing data or not.
+- The `binary_img` used to choose the type of training data, which should be according to the data type you created in the [Data-Preparing](#Data-Preparing).
+
+
 ### Training
 
+Here have three modes for training your model, which should be perform the same results at the end.
 ```bash
 # traning with tf.GradientTape()
 python train.py --mode 'eager_tf' --cfg_path "./configs/arc_res50.yaml"
@@ -132,7 +148,7 @@ python train.py --mode 'eager_fit' --cfg_path "./configs/arc_res50.yaml"
 
 ### Testing
 
-Testing code in `./modules/evaluations.py` were modified from [face.evoLVe](https://github.com/ZhaoJ9014/face.evoLVe.PyTorch). You can download my trained models for testing from [here](#Benchmark-and-Models).
+You can download my trained models for testing from [Benchmark and Models](#Benchmark-and-Models) without training yourself. And, evaluate the model you got with the corresponding cfg file on the testing dataset. The testing code in [./modules/evaluations.py](https://github.com/peteryuX/arcface-tf2/blob/master/modules/evaluations.py) were modified from [face.evoLVe](https://github.com/ZhaoJ9014/face.evoLVe.PyTorch).
 
 ```bash
 python test.py --cfg_path "./configs/arc_res50.yaml"
@@ -140,7 +156,7 @@ python test.py --cfg_path "./configs/arc_res50.yaml"
 
 ### Encode Input Image
 
-Encode a single image from `./data/BruceLee.jpg` as an example. And, the encoded results will save to `./output_embeds.npy`.
+You can also encode image into latent vector by model. For example, encode the image from [./data/BruceLee.jpg](https://github.com/peteryuX/arcface-tf2/blob/master/data/BruceLee.jpg) and save to `./output_embeds.npy` as following.
 
 ```bash
 python test.py --cfg_path "./configs/arc_res50.yaml" --img_path "./data/BruceLee.jpg"
@@ -151,9 +167,7 @@ python test.py --cfg_path "./configs/arc_res50.yaml" --img_path "./data/BruceLee
 ## Benchmark and Models
 :coffee:
 
-Verification results (%) of different backbone and loss function.
-
-Note: CCrop means do central-cropping on both trainging and testing data, which might could eliminate the redundant boundary of intput face data. Training setting can be found in the corresponding `./configs/*.yaml` file.
+Verification results (%) of different backbone, head tpye, data augmentation and loss function.
 
 | Backbone | Head | Loss | CCrop | LFW | CFP-FP | AgeDB-30 | Download Link |
 |----------|------|------|-------|-----|--------|----------|---------------|
@@ -162,12 +176,16 @@ Note: CCrop means do central-cropping on both trainging and testing data, which 
 | [ResNet50](https://arxiv.org/abs/1512.03385) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | True |        |         |          | Comming soon |
 | [MobileNetV2](https://arxiv.org/abs/1801.04381) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | True |        |         |          | Comming soon |
 
+Note:
+- The 'CCrop' tag above means doing central-cropping on both trainging and testing data, which could eliminate the redundant boundary of intput face data.
+- All training settings of the models can be found in the corresponding [./configs/*.yaml](https://github.com/peteryuX/arcface-tf2/tree/master/configs) files.
+
 ****
 
 ## References
 :hamburger:
 
-Thanks for these source codes porvide me with enough knowledges to complete this repository.
+Thanks for these source codes porviding me with knowledges to complete this repository.
 
 - https://github.com/deepinsight/insightface (Official)
     - Face Analysis Project on MXNet http://insightface.ai
