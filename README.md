@@ -19,27 +19,6 @@ Offical Implementation: &nbsp; [MXNet](https://github.com/deepinsight/insightfac
 * [Benchmark and Models](#Benchmark-and-Models)
 * [References](#References)
 
-<!-- **** -->
-
-<!-- ## TODO Features -->
-<!-- :pencil2: -->
-
-<!-- :triangular_flag_on_post: learning rate scheduler -->
-
-<!-- :triangular_flag_on_post: make tensorboard graph clean (need to change model to layer, or use name scope) -->
-
-<!-- :triangular_flag_on_post: final check the personal loading path be changed -->
-
-<!-- :triangular_flag_on_post: final check TODO: -->
-
-<!-- :triangular_flag_on_post: final check requirements installation -->
-
-<!-- :triangular_flag_on_post: final check the README.md -->
-
-<!-- :triangular_flag_on_post: add MIT License -->
-
-****
-
 ## Installation
 :pizza:
 
