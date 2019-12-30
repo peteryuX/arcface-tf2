@@ -35,6 +35,7 @@ def main(_):
                          num_classes=cfg['num_classes'],
                          head_type=cfg['head_type'],
                          embd_shape=cfg['embd_shape'],
+                         w_decay=cfg['w_decay'],
                          training=True)
     model.summary(line_length=80)
 
@@ -76,7 +77,7 @@ def main(_):
             for inputs, labels in train_dataset:
                 with tf.GradientTape() as tape:
                     logist = model(inputs, training=True)
-                    reg_loss = tf.reduce_sum(model.losses) * cfg['w_decay']
+                    reg_loss = tf.reduce_sum(model.losses)
                     pred_loss = loss_fn(labels, logist)
                     total_loss = pred_loss + reg_loss
 
