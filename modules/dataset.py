@@ -40,10 +40,12 @@ def _transform_targets(y_train):
     return y_train
 
 
-def load_tfrecord_dataset(tfrecord_name, batch_size, binary_img=False,
-                          shuffle=True, buffer_size=10240, is_ccrop=False):
+def load_tfrecord_dataset(tfrecord_name, batch_size,
+                          binary_img=False, shuffle=True, buffer_size=10240,
+                          is_ccrop=False):
     """load dataset from tfrecord"""
     raw_dataset = tf.data.TFRecordDataset(tfrecord_name)
+    raw_dataset = raw_dataset.repeat()
     if shuffle:
         raw_dataset = raw_dataset.shuffle(buffer_size=buffer_size)
     dataset = raw_dataset.map(

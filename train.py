@@ -73,44 +73,46 @@ def main(_):
         summary_writer = tf.summary.create_file_writer(
             './logs/' + cfg['sub_name'])
 
-        while epochs < cfg['epochs'] + 1:
-            for inputs, labels in train_dataset:
-                with tf.GradientTape() as tape:
-                    logist = model(inputs, training=True)
-                    reg_loss = tf.reduce_sum(model.losses)
-                    pred_loss = loss_fn(labels, logist)
-                    total_loss = pred_loss + reg_loss
+        for inputs, labels in train_dataset:
+            epochs = steps // steps_per_epoch + 1
+            if epochs > total_epoch:
+                break
 
-                grads = tape.gradient(total_loss, model.trainable_variables)
-                optimizer.apply_gradients(
-                    zip(grads, model.trainable_variables))
+            with tf.GradientTape() as tape:
+                logist = model(inputs, training=True)
+                reg_loss = tf.reduce_sum(model.losses)
+                pred_loss = loss_fn(labels, logist)
+                total_loss = pred_loss + reg_loss
 
-                if steps % 5 == 0 and steps > 0:
-                    verb_str = "Epoch {}/{}: {}/{}, loss={:.2f}, lr={:.4f}"
-                    print(verb_str.format(epochs, cfg['epochs'],
-                                          steps % steps_per_epoch,
-                                          steps_per_epoch,
-                                          total_loss.numpy(),
-                                          learning_rate.numpy()))
+            grads = tape.gradient(total_loss, model.trainable_variables)
+            optimizer.apply_gradients(
+                zip(grads, model.trainable_variables))
 
-                    with summary_writer.as_default():
-                        tf.summary.scalar(
-                            'loss/total loss', total_loss, step=steps)
-                        tf.summary.scalar(
-                            'loss/pred loss', pred_loss, step=steps)
-                        tf.summary.scalar(
-                            'loss/reg loss', reg_loss, step=steps)
-                        tf.summary.scalar(
-                            'learning rate', optimizer.lr, step=steps)
+            if steps % 5 == 0 and steps > 0:
+                verb_str = "Epoch {}/{}: {}/{}, loss={:.2f}, lr={:.4f}"
+                print(verb_str.format(epochs, cfg['epochs'],
+                                      steps % steps_per_epoch,
+                                      steps_per_epoch,
+                                      total_loss.numpy(),
+                                      learning_rate.numpy()))
 
-                if steps % 1000 == 0 and steps > 0:
-                    print('[*] save ckpt file!')
-                    ckpt_name = 'checkpoints/{}/e_{}_s_{}.ckpt'
-                    model.save_weights(
-                        ckpt_name.format(cfg['sub_name'], epochs, steps))
+                with summary_writer.as_default():
+                    tf.summary.scalar(
+                        'loss/total loss', total_loss, step=steps)
+                    tf.summary.scalar(
+                        'loss/pred loss', pred_loss, step=steps)
+                    tf.summary.scalar(
+                        'loss/reg loss', reg_loss, step=steps)
+                    tf.summary.scalar(
+                        'learning rate', optimizer.lr, step=steps)
 
-                steps += 1
-            epochs += 1
+            if steps % 1000 == 0 and steps > 0:
+                print('[*] save ckpt file!')
+                ckpt_name = 'checkpoints/{}/e_{}_s_{}.ckpt'
+                model.save_weights(
+                    ckpt_name.format(cfg['sub_name'], epochs, steps))
+
+            steps += 1
     else:
         model.compile(optimizer=optimizer, loss=loss_fn,
                       run_eagerly=(FLAGS.mode == 'eager_fit'))
@@ -131,6 +133,8 @@ def main(_):
                             steps_per_epoch=steps_per_epoch,
                             callbacks=callbacks,
                             initial_epoch=epochs - 1)
+
+    print('[*] training done!')
 
 
 if __name__ == '__main__':
