@@ -104,7 +104,8 @@ num_classes: 85742
 num_samples: 5822653
 epochs: 5
 base_lr: 0.01
-w_decay: 5e-4
+w_decay: !!float 5e-4
+save_steps: 1000
 
 # test
 test_dataset: '/your/path/to/test_dataset'

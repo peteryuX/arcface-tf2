@@ -106,7 +106,7 @@ def main(_):
                     tf.summary.scalar(
                         'learning rate', optimizer.lr, step=steps)
 
-            if steps % 1000 == 0 and steps > 0:
+            if steps % cfg['save_steps'] == 0 and steps > 0:
                 print('[*] save ckpt file!')
                 ckpt_name = 'checkpoints/{}/e_{}_s_{}.ckpt'
                 model.save_weights(
@@ -119,7 +119,7 @@ def main(_):
 
         mc_callback = ModelCheckpoint(
                 'checkpoints/' + cfg['sub_name'] + '/e_{epoch}_s_{batch}.ckpt',
-                save_freq=1000 * cfg['batch_size'] + 1, verbose=1,
+                save_freq=cfg['save_steps'] * cfg['batch_size'] + 1, verbose=1,
                 save_weights_only=True)
         tb_callback = TensorBoard(log_dir='logs/',
                                   update_freq=cfg['batch_size'] * 5,
