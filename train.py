@@ -22,7 +22,7 @@ flags.DEFINE_enum('mode', 'fit', ['fit', 'eager_fit', 'eager_tf'],
 
 def main(_):
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-    os.environ["CUDA_VISIBLE_DEVICES"] = FLAGS.gpu
+    os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpu
 
     logger = tf.get_logger()
     logger.disabled = True
@@ -59,13 +59,13 @@ def main(_):
 
     ckpt_path = tf.train.latest_checkpoint('./checkpoints/' + cfg['sub_name'])
     if ckpt_path is not None:
-        print('[*] load ckpt from {}'.format(ckpt_path))
+        print("[*] load ckpt from {}".format(ckpt_path))
         epochs, steps = get_ckpt_inf(ckpt_path)
         model.load_weights(ckpt_path)
     else:
-        print('[*] training from scratch.')
+        print("[*] training from scratch.")
         epochs = 1
-        steps = 0
+        steps = 1
 
     if FLAGS.mode == 'eager_tf':
         # Eager mode is great for debugging
@@ -73,10 +73,10 @@ def main(_):
         summary_writer = tf.summary.create_file_writer(
             './logs/' + cfg['sub_name'])
 
-        for inputs, labels in train_dataset:
-            epochs = steps // steps_per_epoch + 1
-            if epochs > total_epoch:
-                break
+        train_dataset = iter(train_dataset)
+
+        while epochs <= cfg['epochs']:
+            inputs, labels = next(train_dataset)
 
             with tf.GradientTape() as tape:
                 logist = model(inputs, training=True)
@@ -85,10 +85,9 @@ def main(_):
                 total_loss = pred_loss + reg_loss
 
             grads = tape.gradient(total_loss, model.trainable_variables)
-            optimizer.apply_gradients(
-                zip(grads, model.trainable_variables))
+            optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
-            if steps % 5 == 0 and steps > 0:
+            if steps % 5 == 0:
                 verb_str = "Epoch {}/{}: {}/{}, loss={:.2f}, lr={:.4f}"
                 print(verb_str.format(epochs, cfg['epochs'],
                                       steps % steps_per_epoch,
@@ -106,13 +105,14 @@ def main(_):
                     tf.summary.scalar(
                         'learning rate', optimizer.lr, step=steps)
 
-            if steps % cfg['save_steps'] == 0 and steps > 0:
+            if steps % cfg['save_steps'] == 0:
                 print('[*] save ckpt file!')
                 ckpt_name = 'checkpoints/{}/e_{}_s_{}.ckpt'
                 model.save_weights(
                     ckpt_name.format(cfg['sub_name'], epochs, steps))
 
             steps += 1
+            epochs = steps // steps_per_epoch + 1
     else:
         model.compile(optimizer=optimizer, loss=loss_fn,
                       run_eagerly=(FLAGS.mode == 'eager_fit'))
@@ -134,7 +134,7 @@ def main(_):
                             callbacks=callbacks,
                             initial_epoch=epochs - 1)
 
-    print('[*] training done!')
+    print("[*] training done!")
 
 
 if __name__ == '__main__':
