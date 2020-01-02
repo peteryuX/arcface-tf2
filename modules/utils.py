@@ -11,13 +11,14 @@ def load_yaml(load_path):
     return loaded
 
 
-def get_ckpt_inf(ckpt_path):
+def get_ckpt_inf(ckpt_path, steps_per_epoch):
     """get ckpt information"""
-    _split_list = ckpt_path.split('e_')[-1].split('_s_')
-    epoch = int(_split_list[0])
-    step = int(_split_list[-1].split('.ckpt')[0]) + 1
+    split_list = ckpt_path.split('e_')[-1].split('_b_')
+    epochs = int(split_list[0])
+    batchs = int(split_list[-1].split('.ckpt')[0])
+    steps = (epochs - 1) * steps_per_epoch + batchs
 
-    return epoch, step
+    return epochs, steps + 1
 
 
 def l2_norm(x, axis=1):

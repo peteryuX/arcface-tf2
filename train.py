@@ -60,12 +60,11 @@ def main(_):
     ckpt_path = tf.train.latest_checkpoint('./checkpoints/' + cfg['sub_name'])
     if ckpt_path is not None:
         print("[*] load ckpt from {}".format(ckpt_path))
-        epochs, steps = get_ckpt_inf(ckpt_path)
         model.load_weights(ckpt_path)
+        epochs, steps = get_ckpt_inf(ckpt_path, steps_per_epoch)
     else:
         print("[*] training from scratch.")
-        epochs = 1
-        steps = 1
+        epochs, steps = 1, 1
 
     if FLAGS.mode == 'eager_tf':
         # Eager mode is great for debugging
@@ -107,9 +106,8 @@ def main(_):
 
             if steps % cfg['save_steps'] == 0:
                 print('[*] save ckpt file!')
-                ckpt_name = 'checkpoints/{}/e_{}_s_{}.ckpt'
-                model.save_weights(
-                    ckpt_name.format(cfg['sub_name'], epochs, steps))
+                model.save_weights('checkpoints/{}/e_{}_b_{}.ckpt'.format(
+                    cfg['sub_name'], epochs, steps % steps_per_epoch))
 
             steps += 1
             epochs = steps // steps_per_epoch + 1
@@ -118,9 +116,9 @@ def main(_):
                       run_eagerly=(FLAGS.mode == 'eager_fit'))
 
         mc_callback = ModelCheckpoint(
-                'checkpoints/' + cfg['sub_name'] + '/e_{epoch}_s_{batch}.ckpt',
-                save_freq=cfg['save_steps'] * cfg['batch_size'] + 1, verbose=1,
-                save_weights_only=True)
+            'checkpoints/' + cfg['sub_name'] + '/e_{epoch}_b_{batch}.ckpt',
+            save_freq=cfg['save_steps'] * cfg['batch_size'], verbose=1,
+            save_weights_only=True)
         tb_callback = TensorBoard(log_dir='logs/',
                                   update_freq=cfg['batch_size'] * 5,
                                   profile_batch=0)
