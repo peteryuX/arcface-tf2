@@ -59,10 +59,10 @@ Download [MS-Celeb-1M](https://drive.google.com/file/d/1X202mvYe5tiXFhOx82z4rPiP
 
 ```bash
 # Binary Image: convert really slow, but loading faster when traning.
-python data/convert_train_binary_tfrecord.py --dataset_path "/path/to/ms1m_align_112/imgs" --output_path "./data/ms1m_bin.tfrecord"
+python data/convert_train_binary_tfrecord.py --dataset_path="/path/to/ms1m_align_112/imgs" --output_path="./data/ms1m_bin.tfrecord"
 
-# Online Decoding: convert really fast, but loading slower when training.
-python data/convert_train_tfrecord.py --dataset_path "/path/to/ms1m_align_112/imgs" --output_path "./data/ms1m.tfrecord"
+# Online Image Loading: convert really fast, but loading slower when training.
+python data/convert_train_tfrecord.py --dataset_path="/path/to/ms1m_align_112/imgs" --output_path="./data/ms1m.tfrecord"
 ```
 
 ### Testing Dataset
@@ -123,13 +123,13 @@ Note:
 Here have three modes for training your model, which should be perform the same results at the end.
 ```bash
 # traning with tf.GradientTape()
-python train.py --mode 'eager_tf' --cfg_path "./configs/arc_res50.yaml"
+python train.py --mode="eager_tf" --cfg_path="./configs/arc_res50.yaml"
 
 # training with model.fit().
-python train.py --mode 'fit' --cfg_path "./configs/arc_res50.yaml"
+python train.py --mode="fit" --cfg_path="./configs/arc_res50.yaml"
 
 # training with model.fit(run_eagerly=True).
-python train.py --mode 'eager_fit' --cfg_path "./configs/arc_res50.yaml"
+python train.py --mode="eager_fit" --cfg_path="./configs/arc_res50.yaml"
 ```
 
 ### Testing
@@ -137,7 +137,7 @@ python train.py --mode 'eager_fit' --cfg_path "./configs/arc_res50.yaml"
 You can download my trained models for testing from [Benchmark and Models](#Benchmark-and-Models) without training it yourself. And, evaluate the models you got with the corresponding cfg file on the testing dataset. The testing code in [./modules/evaluations.py](https://github.com/peteryuX/arcface-tf2/blob/master/modules/evaluations.py) were modified from [face.evoLVe](https://github.com/ZhaoJ9014/face.evoLVe.PyTorch).
 
 ```bash
-python test.py --cfg_path "./configs/arc_res50.yaml"
+python test.py --cfg_path="./configs/arc_res50.yaml"
 ```
 
 ### Encode Input Image
@@ -145,7 +145,7 @@ python test.py --cfg_path "./configs/arc_res50.yaml"
 You can also encode image into latent vector by model. For example, encode the image from [./data/BruceLee.jpg](https://github.com/peteryuX/arcface-tf2/blob/master/data/BruceLee.jpg) and save to `./output_embeds.npy` as following.
 
 ```bash
-python test.py --cfg_path "./configs/arc_res50.yaml" --img_path "./data/BruceLee.jpg"
+python test.py --cfg_path="./configs/arc_res50.yaml" --img_path="./data/BruceLee.jpg"
 ```
 
 ****
