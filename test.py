@@ -7,7 +7,7 @@ import tensorflow as tf
 
 from modules.evaluations import get_val_data, perform_val
 from modules.models import ArcFaceModel
-from modules.utils import load_yaml, l2_norm
+from modules.utils import set_memory_growth, load_yaml, l2_norm
 
 
 flags.DEFINE_string('cfg_path', './configs/arc_res50.yaml', 'config file path')
@@ -22,6 +22,7 @@ def main(_argv):
     logger = tf.get_logger()
     logger.disabled = True
     logger.setLevel(logging.FATAL)
+    set_memory_growth()
 
     cfg = load_yaml(FLAGS.cfg_path)
 

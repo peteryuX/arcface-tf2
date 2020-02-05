@@ -8,7 +8,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 
 from modules.models import ArcFaceModel
 from modules.losses import SoftmaxLoss
-from modules.utils import load_yaml, get_ckpt_inf
+from modules.utils import set_memory_growth, load_yaml, get_ckpt_inf
 import modules.dataset as dataset
 
 
@@ -27,6 +27,7 @@ def main(_):
     logger = tf.get_logger()
     logger.disabled = True
     logger.setLevel(logging.FATAL)
+    set_memory_growth()
 
     cfg = load_yaml(FLAGS.cfg_path)
 
