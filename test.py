@@ -35,7 +35,7 @@ def main(_argv):
         print("[*] load ckpt from {}".format(ckpt_path))
         model.load_weights(ckpt_path)
     else:
-        print("[*] Cannot find ckpt.")
+        print("[*] Cannot find ckpt from {}.".format(ckpt_path))
         exit()
 
     if FLAGS.img_path:
