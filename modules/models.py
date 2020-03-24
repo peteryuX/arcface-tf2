@@ -1,5 +1,4 @@
 import tensorflow as tf
-from tensorflow.python import keras
 from tensorflow.keras import Model
 from tensorflow.keras.layers import (
     Dense,

@@ -2,7 +2,6 @@ from absl import app, flags, logging
 from absl.flags import FLAGS
 import os
 import tensorflow as tf
-import numpy as np
 
 from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 
@@ -49,7 +48,6 @@ def main(_):
             is_ccrop=cfg['is_ccrop'])
     else:
         logging.info("load fake dataset.")
-        dataset_len = 1
         steps_per_epoch = 1
         train_dataset = dataset.load_fake_dataset(cfg['input_size'])
 
@@ -127,11 +125,11 @@ def main(_):
         tb_callback._samples_seen = steps * cfg['batch_size']
         callbacks = [mc_callback, tb_callback]
 
-        history = model.fit(train_dataset,
-                            epochs=cfg['epochs'],
-                            steps_per_epoch=steps_per_epoch,
-                            callbacks=callbacks,
-                            initial_epoch=epochs - 1)
+        model.fit(train_dataset,
+                  epochs=cfg['epochs'],
+                  steps_per_epoch=steps_per_epoch,
+                  callbacks=callbacks,
+                  initial_epoch=epochs - 1)
 
     print("[*] training done!")
 

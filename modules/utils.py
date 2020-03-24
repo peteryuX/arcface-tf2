@@ -1,5 +1,4 @@
 import yaml
-from functools import reduce
 import numpy as np
 import tensorflow as tf
 from absl import logging

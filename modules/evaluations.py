@@ -5,7 +5,6 @@ import os
 import cv2
 import bcolz
 import numpy as np
-import sklearn
 import tqdm
 from sklearn.model_selection import KFold
 
