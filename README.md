@@ -1,9 +1,11 @@
 # [arcface-tf2](https://github.com/peteryuX/arcface-tf2)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/peteryuX/arcface-tf2/blob/master/notebooks/colab-github-demo.ipynb)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/peteryuX/arcface-tf2.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/peteryuX/arcface-tf2/context:python)
 ![Star](https://img.shields.io/github/stars/peteryuX/arcface-tf2)
 ![Fork](https://img.shields.io/github/forks/peteryuX/arcface-tf2)
 ![License](https://img.shields.io/github/license/peteryuX/arcface-tf2)
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/peteryuX/arcface-tf2/blob/master/notebooks/colab-github-demo.ipynb)
 
 :fire: ArcFace (Additive Angular Margin Loss for Deep Face Recognition, published in CVPR 2019) implemented in Tensorflow 2.0+. This is an unofficial implementation. :fire:
 
