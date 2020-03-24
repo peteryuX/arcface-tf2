@@ -27,7 +27,8 @@ def main(_):
     start_time = time.time()
     for idx, parsed_record in enumerate(train_dataset.take(num_samples)):
         (x_train, _), y_train = parsed_record
-        print("{} x: {}, y: {}".format(idx, x_train.shape, y_train.shape))
+        print("{} x_train: {}, y_train: {}".format(
+            idx, x_train.shape, y_train.shape))
 
         if FLAGS.visualization:
             recon_img = np.array(x_train[0].numpy() * 255, 'uint8')
