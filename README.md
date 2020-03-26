@@ -132,16 +132,13 @@ Note:
 
 ### Training
 
-Here have three modes for training your model, which should be perform the same results at the end.
+Here have two modes for training your model, which should be perform the same results at the end.
 ```bash
-# traning with tf.GradientTape()
+# traning with tf.GradientTape(), great for debugging.
 python train.py --mode="eager_tf" --cfg_path="./configs/arc_res50.yaml"
 
 # training with model.fit().
 python train.py --mode="fit" --cfg_path="./configs/arc_res50.yaml"
-
-# training with model.fit(run_eagerly=True).
-python train.py --mode="eager_fit" --cfg_path="./configs/arc_res50.yaml"
 ```
 
 ### Testing

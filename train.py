@@ -13,10 +13,8 @@ import modules.dataset as dataset
 
 flags.DEFINE_string('cfg_path', './configs/arc_res50.yaml', 'config file path')
 flags.DEFINE_string('gpu', '0', 'which gpu to use')
-flags.DEFINE_enum('mode', 'fit', ['fit', 'eager_fit', 'eager_tf'],
-                  'fit: model.fit, '
-                  'eager_fit: model.fit(run_eagerly=True), '
-                  'eager_tf: custom GradientTape')
+flags.DEFINE_enum('mode', 'fit', ['fit', 'eager_tf'],
+                  'fit: model.fit, eager_tf: custom GradientTape')
 
 
 def main(_):
@@ -111,8 +109,7 @@ def main(_):
             steps += 1
             epochs = steps // steps_per_epoch + 1
     else:
-        model.compile(optimizer=optimizer, loss=loss_fn,
-                      run_eagerly=(FLAGS.mode == 'eager_fit'))
+        model.compile(optimizer=optimizer, loss=loss_fn)
 
         mc_callback = ModelCheckpoint(
             'checkpoints/' + cfg['sub_name'] + '/e_{epoch}_b_{batch}.ckpt',
