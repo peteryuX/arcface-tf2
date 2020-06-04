@@ -174,6 +174,7 @@ Verification results (%) of different backbone, head tpye, data augmentation and
 Note:
 - The 'CCrop' tag above means doing central-cropping on both trainging and testing data, which could eliminate the redundant boundary of intput face data (especially for AgeDB-30).
 - All training settings of the models can be found in the corresponding [./configs/*.yaml](https://github.com/peteryuX/arcface-tf2/tree/master/configs) files.
+- **Based on the property of the training dataset, all the pre-trained models can only be used for non-commercial applications.**
 
 ****
 
