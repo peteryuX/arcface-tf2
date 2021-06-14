@@ -12,7 +12,7 @@ train_dataset: './data/ms1m_bin.tfrecord'
 binary_img: True
 num_classes: 85742
 num_samples: 5822653
-epochs: 5
+epochs: 2
 base_lr: 0.01
 w_decay: !!float 5e-4
 save_steps: 1000

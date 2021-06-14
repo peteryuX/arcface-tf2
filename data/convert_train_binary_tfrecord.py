@@ -7,10 +7,8 @@ import random
 import tensorflow as tf
 
 
-flags.DEFINE_string('dataset_path', '../Dataset/ms1m_align_112/imgs',
-                    'path to dataset')
-flags.DEFINE_string('output_path', './data/ms1m_bin.tfrecord',
-                    'path to ouput tfrecord')
+flags.DEFINE_string("dataset_path", "../Dataset/ms1m_align_112/imgs", "path to dataset")
+flags.DEFINE_string("output_path", "./data/ms1m_bin.tfrecord", "path to ouput tfrecord")
 
 
 def _bytes_feature(value):
@@ -32,9 +30,11 @@ def _int64_feature(value):
 
 def make_example(img_str, source_id, filename):
     # Create a dictionary with features that may be relevant.
-    feature = {'image/source_id': _int64_feature(source_id),
-               'image/filename': _bytes_feature(filename),
-               'image/encoded': _bytes_feature(img_str)}
+    feature = {
+        "image/source_id": _int64_feature(source_id),
+        "image/filename": _bytes_feature(filename),
+        "image/encoded": _bytes_feature(img_str),
+    }
 
     return tf.train.Example(features=tf.train.Features(feature=feature))
 
@@ -43,29 +43,31 @@ def main(_):
     dataset_path = FLAGS.dataset_path
 
     if not os.path.isdir(dataset_path):
-        logging.info('Please define valid dataset path.')
+        logging.info("Please define valid dataset path.")
     else:
-        logging.info('Loading {}'.format(dataset_path))
+        logging.info("Loading {}".format(dataset_path))
 
     samples = []
-    logging.info('Reading data list...')
+    logging.info("Reading data list...")
     for id_name in tqdm.tqdm(os.listdir(dataset_path)):
-        img_paths = glob.glob(os.path.join(dataset_path, id_name, '*.jpg'))
+        img_paths = glob.glob(os.path.join(dataset_path, id_name, "*.jpg"))
         for img_path in img_paths:
             filename = os.path.join(id_name, os.path.basename(img_path))
             samples.append((img_path, id_name, filename))
     random.shuffle(samples)
 
-    logging.info('Writing tfrecord file...')
+    logging.info("Writing tfrecord file...")
     with tf.io.TFRecordWriter(FLAGS.output_path) as writer:
         for img_path, id_name, filename in tqdm.tqdm(samples):
-            tf_example = make_example(img_str=open(img_path, 'rb').read(),
-                                      source_id=int(id_name),
-                                      filename=str.encode(filename))
+            tf_example = make_example(
+                img_str=open(img_path, "rb").read(),
+                source_id=int(id_name),
+                filename=str.encode(filename),
+            )
             writer.write(tf_example.SerializeToString())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         app.run(main)
     except SystemExit:
