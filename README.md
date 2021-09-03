@@ -166,10 +166,10 @@ Verification results (%) of different backbone, head tpye, data augmentation and
 
 | Backbone | Head | Loss | CCrop | LFW | AgeDB-30 | CFP-FP | Download Link |
 |----------|------|------|-------|-----|--------|----------|---------------|
-| [ResNet50](https://arxiv.org/abs/1512.03385) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | False | 99.35 | 95.03  |  90.36   | [GoogleDrive](https://drive.google.com/file/d/1HasWQb86s4xSYy36YbmhRELg9LBmvhvt/view?usp=sharing) |
-| [MobileNetV2](https://arxiv.org/abs/1801.04381) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | False | 98.67 | 90.87  |  88.51   | [GoogleDrive](https://drive.google.com/file/d/1qG8BChcPHzKuGwjJhrpeIxBqQmhpLvTX/view?usp=sharing) |
-| [ResNet50](https://arxiv.org/abs/1512.03385) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | True | 99.28 | 94.82 | 93.14 | [GoogleDrive](https://drive.google.com/file/d/1zUulC-4hSY_kPqZpcoIHO96OmjMivuKB/view?usp=sharing) |
-| [MobileNetV2](https://arxiv.org/abs/1801.04381) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | True | 98.50 | 91.43 | 89.44 | [GoogleDrive](https://drive.google.com/file/d/1nSnIc0eV0MkSjg48x29PJwTt3fGXKDU4/view?usp=sharing) |
+| [ResNet50](https://arxiv.org/abs/1512.03385) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | False | 99.42 | 95.32  |  92.56   | [GoogleDrive](https://drive.google.com/file/d/1HasWQb86s4xSYy36YbmhRELg9LBmvhvt/view?usp=sharing) |
+| [MobileNetV2](https://arxiv.org/abs/1801.04381) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | False | 99.13 | 91.62  |  91.50   | [GoogleDrive](https://drive.google.com/file/d/1qG8BChcPHzKuGwjJhrpeIxBqQmhpLvTX/view?usp=sharing) |
+| [ResNet50](https://arxiv.org/abs/1512.03385) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | True | 99.38 | 95.13 | 94.87 | [GoogleDrive](https://drive.google.com/file/d/1zUulC-4hSY_kPqZpcoIHO96OmjMivuKB/view?usp=sharing) |
+| [MobileNetV2](https://arxiv.org/abs/1801.04381) | [ArcFace](https://arxiv.org/abs/1801.07698) | Softmax | True | 98.88 | 91.58 | 93.19 | [GoogleDrive](https://drive.google.com/file/d/1nSnIc0eV0MkSjg48x29PJwTt3fGXKDU4/view?usp=sharing) |
 
 Note:
 - The 'CCrop' tag above means doing central-cropping on both trainging and testing data, which could eliminate the redundant boundary of intput face data (especially for AgeDB-30).

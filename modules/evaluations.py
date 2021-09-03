@@ -116,6 +116,8 @@ def perform_val(embedding_size, batch_size, model,
     for idx in tqdm.tqdm(range(0, len(carray), batch_size)):
         batch = carray[idx:idx + batch_size]
         batch = np.transpose(batch, [0, 2, 3, 1]) * 0.5 + 0.5
+        batch = batch[:, :, :, ::-1]  # convert BGR to RGB
+
         if is_ccrop:
             batch = ccrop_batch(batch)
         if is_flip:
@@ -123,7 +125,6 @@ def perform_val(embedding_size, batch_size, model,
             emb_batch = model(batch) + model(fliped)
             embeddings[idx:idx + batch_size] = l2_norm(emb_batch)
         else:
-            batch = ccrop_batch(batch)
             emb_batch = model(batch)
             embeddings[idx:idx + batch_size] = l2_norm(emb_batch)
 

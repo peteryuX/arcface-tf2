@@ -45,6 +45,7 @@ def main(_argv):
         img = img.astype(np.float32) / 255.
         if len(img.shape) == 3:
             img = np.expand_dims(img, 0)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         embeds = l2_norm(model(img))
         np.save('./output_embeds.npy', embeds)
     else:
