@@ -43,9 +43,9 @@ def main(_argv):
         img = cv2.imread(FLAGS.img_path)
         img = cv2.resize(img, (cfg['input_size'], cfg['input_size']))
         img = img.astype(np.float32) / 255.
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         if len(img.shape) == 3:
             img = np.expand_dims(img, 0)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         embeds = l2_norm(model(img))
         np.save('./output_embeds.npy', embeds)
     else:
