@@ -183,7 +183,7 @@ Note:
 
 Thanks for these source codes porviding me with knowledges to complete this repository.
 
-- https://github.com/deepinsight/insightface (Official)
+- https://github.com/deepinsight/insightface/tree/master/recognition (Official)
     - Face Analysis Project on MXNet http://insightface.ai
 - https://github.com/zzh8829/yolov3-tf2
     - YoloV3 Implemented in TensorFlow 2.0
